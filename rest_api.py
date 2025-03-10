@@ -1,6 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
+from krx_openai import run_openai_chat 
 
 # FastAPI 앱 생성
 kca = FastAPI()
@@ -13,28 +14,22 @@ class Chat(BaseModel):
 @kca.get("/")
 def read_root():
     return {
-                "message": "Hello, KRX Code Assistant",
-                "usage" : {
-                    "url" : "http://localhost:8080/chat/",
-                    "method" : "POST",
-                    "body" : {
-                        "prompt" : "string"
-                        }
-                }
+        "message": "Hello, KRX Code Assistant",
+        "usage": {
+            "url": "http://localhost:8080/chat/",
+            "method": "POST",
+            "body": {
+                "chat": "string"
             }
+        }
+    }
 
-# 파라미터를 받는 GET 요청
-# @kca.get("/items/{item_id}")
-# def read_item(item_id: int, query: str = None):
-#     return {"item_id": item_id, "query": query}
-
-# POST 요청 (데이터 받기)
+# POST 요청 처리 (vector.py 함수 호출)
 @kca.post("/chat/")
-def create_item(item: Chat):
-    return {"received_item": item}
+def chat(chat: Chat):
+    response_text = run_openai_chat(chat.chat)  #  사용자의 입력을 vector.py로 전달
+    return {"response": response_text}  #  AI 응답 반환
 
-# API 서버 실행 방법:
-# uvicorn app:app --reload
-
+# API 서버 실행
 if __name__ == "__main__":
     uvicorn.run(kca, host="0.0.0.0", port=8080)
