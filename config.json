@@ -1,0 +1,20 @@
+{
+  // ...existing code...
+  "contextProviders": {
+    // ...existing code...
+    "http": {
+      "name": "http",
+      "params": {
+        "url": "https://myserver.com/context-provider",
+        "title": "http",
+        "description": "Custom HTTP Context Provider",
+        "displayTitle": "My Custom Context",
+        "options": {
+          "maxItems": 20
+        }
+      }
+    }
+    // ...existing code...
+  }
+  // ...existing code...
+}

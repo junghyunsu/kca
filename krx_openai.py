@@ -33,7 +33,6 @@ chain_with_history = RunnableWithMessageHistory(
     history_messages_key="history"
 )
 
-
 def run_openai_chat(input_text: str, session_id: str = "conversation_session") -> str:
     """
     사용자의 입력을 받아 벡터 검색 후 AI 응답을 반환하는 함수
@@ -68,3 +67,14 @@ def run_openai_chat(input_text: str, session_id: str = "conversation_session") -
     #     print(f"{msg.type}: {msg.content}")
     print("---------------------------------------------------------------------")
     return response.content  # AI 응답 반환
+
+
+def run_continue_dev_context(input_text: str, session_id: str = "conversation_session") -> str:
+    """
+    continue-dev context provider 요청에 대해서 벡터 검색 prompt에 사용될 context를 반환하는 함수
+    """
+    # 벡터 검색 수행
+    context = search_vector("나의 정보")
+    # print(f"Context: {context}")
+    print("---------------------------------------------------------------------")
+    return context  # AI 응답 반환

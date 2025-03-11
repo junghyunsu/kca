@@ -8,8 +8,13 @@ embeddings = OpenAIEmbeddings()
 #공통 코드를 Vector DB에 저장해야 한다.
 vectorstore = FAISS.from_texts([
     "공통 부분(코드): 이부분은 공통 코드 영역입니다.",
-    "공통 부분(메타): 이 부분은 공통 메타 영역입니다."
+    "공통 부분(메타): 이 부분은 공통 메타 영역입니다.",
+    "나의 정보(직장): 프리랜서",
+    "나의 정보(직업): 엔지니어",
+    "나의 정보(이름): 정현수",
+    "나의 정보(나이): 51"
     ], embeddings)
+
 
 def search_vector(query: str) -> str:
     """
