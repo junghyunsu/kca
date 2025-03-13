@@ -1,5 +1,5 @@
 아래 조건을 만족하는 Operation 코드를 생성해주되 답변은 코드만 보여줘
-Id: SHRABSN10101,  logicalName : 연차관리 조회 
+Id: SHRABSN10101,  logicalName : 연차관리 조회
 In : SHRABSN10101In, Out : SHRABSN10101Out
 
 로직:

@@ -1,5 +1,5 @@
 @BxmServiceOperation("SHRABSN10101")
-@BxmCategory(logicalName = "연차관리")
+@BxmCategory(logicalName = "연차관리 조회")
 public SHRABSN10101Out SHRABSN10101(SHRABSN10101In input) throws DefaultApplicationException {
 
     BHRAbsnYrly bean = DefaultApplicationContext.getBean(BHRAbsnYrly.class);
