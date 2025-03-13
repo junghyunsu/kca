@@ -1,0 +1,12 @@
+OMM bwg.absn.sc.dto.SHRABSN10101In
+< description="연월차관리 - 조회 In" logicalName = "연월차관리 - 조회 In"
+>
+{
+	String crprCd<length=3 description="법인코드">;
+	String atrbYy<length=4 description="귀속연도">;
+	String orgnSiteCd < length = 20 description = "원소속사업장코드" > ;
+	String dprtCd<length=20 description="부서코드">;
+	String workStCd<length=20 description="근무상태코드">;
+	String emplGbCd < length = 20 description = "사원구분코드" > ;
+	String srchVl < length = 100 description = "검색어" > ;
+}

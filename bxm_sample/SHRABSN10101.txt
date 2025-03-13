@@ -1,0 +1,9 @@
+아래 조건을 만족하는 Operation 코드를 생성해주되 답변은 코드만 보여줘
+Id: SHRABSN10101,  logicalName : 연차관리 조회 
+In : SHRABSN10101In, Out : SHRABSN10101Out
+
+로직:
+BHRAbsnYrly Bean 객체 생성(DHRAbsnYrly01IO를 parater로 사용) 이고 리턴 값은 List<DHRAbsnYrly01IO> 임
+DHRAbsnYrly01IO DTO를 생성하고 SHRABSN10101In의 필드 값을 복사
+Bean.selectYrlyList(HRAbsnYrly01IO) 호출
+위 호출 결과 List<DHRAbsnYrly01IO>의 값을 SHRABSN10101Out.sub 필드에 넣어주는 로직 생성

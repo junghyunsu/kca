@@ -1,0 +1,7 @@
+OMM bwg.absn.sc.dto.SHRABSN10101Out
+< description="연월차관리 - 조회 Out" logicalName = "연월차관리 - 조회 Out"
+>
+{
+	Integer sub01Cnt<length=4>;
+	bwg.absn.sc.dto.SHRABSN10101Sub sub01<length=20 arrayReference="sub01Cnt">;
+}

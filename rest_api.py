@@ -43,9 +43,13 @@ def chat(chat: Chat):
 @kca.post("/continue-dev/")
 def continew_dev(continueDevInput: ContnueDevInput):
     print(f"query: {continueDevInput.query}")
-    context = run_continue_dev_context(continueDevInput.query)  # Vector DB만 검색한 결과를 context로 전달
-    print(f"context: {context}")
-    return ContinueDevOutput(content=context)  # continue-dev OUt으로 생성
+    # Vector DB만 검색한 결과를 context로 전달
+    context = run_continue_dev_context(continueDevInput.query)
+    context = ["\n".join(item) if isinstance(item, list) else item for item in context]
+
+    retStr = "\n\n".join(context)
+    print(f"context: {retStr}")
+    return ContinueDevOutput(content=retStr)  # continue-dev OUt으로 생성
 
 # API 서버 실행
 if __name__ == "__main__":
