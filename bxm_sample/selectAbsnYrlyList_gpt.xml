@@ -1,0 +1,61 @@
+<select id="selectAbsnYrlyList" parameterType="map" resultType="bwg.absn.dao.dto.DHRAbsnYrly01IO">
+SELECT
+    A.CRPR_CD,
+    A.EMPL_NO,
+    B.EMPL_NM,
+    TO_CHAR(B.JOIN_YMD, 'YYYYMMDD') AS JOIN_YMD,
+    TO_CHAR(B.GRP_JOIN_YMD, 'YYYYMMDD') AS GRP_JOIN_YMD,
+    TO_CHAR(B.YRLY_BASE_YMD, 'YYYYMMDD') AS YRLY_BASE_YMD,
+    TO_CHAR(B.RTRM_YMD, 'YYYYMMDD') AS RTRM_YMD,
+    A.ATRB_YY,
+    A.ATRB_MM,
+    TO_CHAR(A.BASE_YMD, 'YYYYMMDD') AS BASE_YMD,
+    TO_CHAR(A.CLCL_YMD, 'YYYYMMDD') AS CLCL_YMD,
+    A.TTL_LNGV_DAYS,
+    A.LNGV_YRS,
+    A.YRLY_DAYS,
+    A.USE_DAYS,
+    A.EXTN_DAYS,
+    A.UNSD_DAYS,
+    A.DPRT_CD,
+    D.DPRT_NM,
+    B.ORGN_SITE_CD,
+    F.SITE_NM AS ORGN_SITE_NM,
+    TO_CHAR(E.ENLS_YMD, 'YYYYMMDD') AS ENLS_YMD,
+    TO_CHAR(E.DSCH_YMD, 'YYYYMMDD') AS DSCH_YMD,
+    H.PSTN_CD,
+    H.EMPL_GB_CD,
+    H.WORK_ST_CD
+FROM
+    HR_ABSN_YRLY A
+INNER JOIN
+    HR_PRSN_MSTR B ON A.CRPR_CD = B.CRPR_CD AND A.EMPL_NO = B.EMPL_NO
+LEFT JOIN
+    CM_DPRT_MSTR D ON A.CRPR_CD = D.CRPR_CD AND A.DPRT_CD = D.DPRT_CD
+LEFT JOIN
+    HR_PRSN_DTLS E ON A.CRPR_CD = E.CRPR_CD AND A.EMPL_NO = E.EMPL_NO
+LEFT JOIN
+    AC_SITE_MSTR F ON B.CRPR_CD = F.CRPR_CD AND B.ORGN_SITE_CD = F.SITE_CD
+LEFT JOIN
+    (
+        SELECT CRPR_CD, EMPL_NO, DPRT_CD, PSTN_CD, EMPL_GB_CD, WORK_ST_CD
+        FROM HR_PRSN_MSTR_HSTR
+        WHERE (CRPR_CD, EMPL_NO, STRT_YMD) IN (
+            SELECT CRPR_CD, EMPL_NO, MAX(STRT_YMD)
+            FROM HR_PRSN_MSTR_HSTR
+            WHERE STRT_YMD &lt;= TO_DATE(#{year}||'1231', 'YYYYMMDD')
+            GROUP BY CRPR_CD, EMPL_NO
+        )
+    ) H ON A.CRPR_CD = H.CRPR_CD AND A.EMPL_NO = H.EMPL_NO
+WHERE
+    A.CRPR_CD = #{crprCd}
+    AND A.ATRB_YY IN (#{year}, TO_CHAR(TO_NUMBER(#{year}) - 1))
+    <if test="emplNo != null and emplNo != ''">
+        AND A.EMPL_NO = #{emplNo}
+    </if>
+    <if test="dprtCd != null and dprtCd != ''">
+        AND A.DPRT_CD = #{dprtCd}
+    </if>
+ORDER BY
+    A.EMPL_NO ASC, A.ATRB_YY DESC
+</select>

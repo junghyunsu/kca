@@ -13,7 +13,7 @@ public class MSmpEmpInfMng {
      * @return DSmpEmpTst000Dto
      * @throws DefaultApplicationException
      */
-    @BxmCategory(logicalName = "Single Select")
+    @BxmCategory(logicalName = "Single Select", description = "Select a single employee info.")
     public DSmpEmpTst000Dto getEmpInf(DSmpEmpTst000Dto input) throws DefaultApplicationException {
 
         logger.debug("============== START ==============");

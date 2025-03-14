@@ -1,0 +1,116 @@
+<select id="selectAbsnYrlyList" parameterType="bwg.absn.dao.dto.DHRAbsnYrly01IO" resultType="bwg.absn.dao.dto.DHRAbsnYrly01IO">&#13;
+/* 근태_연차관리 */ 
+SELECT NVL(HAY.CRPR_CD, HPM.CRPR_CD)  			AS crprCd /*법인코드*/
+            , NVL(HAY.EMPL_NO, HPM.EMPL_NO)			AS emplNo /*사원번호*/
+            , HAY.ATRB_YY            AS atrbYy /* 귀속연도 */
+            , HAY.ATRB_MM            AS atrbMm /* 귀속월 */
+            , HAY.BASE_YMD           AS baseYmd /* 기준일자 */
+            , HAY.CLCL_YMD           AS clclYmd /* 계산일자 */
+            , NVL(HAY.JOIN_YMD, HPM.JOIN_YMD)           AS joinYmd /* 입사일자 */
+            , NVL(HAY.GRP_JOIN_YMD, HPM.GRP_JOIN_YMD)       AS grpJoinYmd /* 그룹입사일자 */
+            , NVL(HAY.YRLY_BASE_YMD, HPM.YRLY_BASE_YMD)      AS yrlyBaseYmd /* 연차기산일자 */
+            , NVL(HAY.RTRM_YMD, HPM.RTRM_YMD)           AS rtrmYmd /* 퇴직일자 */
+            , NVL(HAY.DPRT_CD, HPMH.DPRT_CD)            AS dprtCd /* 부서코드 */
+            , NVL(HAY.PSTN_CD, HPMH.PSTN_CD)            AS pstnCd /* 직위코드 */
+            , NVL(HAY.EMPL_GB_CD, HPMH.EMPL_GB_CD)    AS emplGbCd /* 사원구분코드 */  
+            , HAY.TTL_LNGV_DAYS   AS ttlLngvDays /* 총근속일수 */
+            , HAY.TTL_LNGV_MNTH  AS ttlLngvMnth/* 총근속개월수 */
+            , HAY.LNGV_YRS            AS lngvYrs /* 근속연수 */
+            , HAY.LNGV_MNTH          AS lngvMnth /* 근속월수 */
+            , HAY.LNGV_DAYS          AS lngvDays /* 근속일수 */
+            , HAY.ADED_DAYS          AS adedDays /* 가산연차일수 */
+            , HAY.ARM_ADED_DAYS      AS armAdedDays /* 군가산일수 */
+            , HAY.YRLY_DAYS          AS yrlyDays /* 발생연차일수 */
+            , HAY.PRE_FRWR_DAYS      AS preFrwrDays /* 이월연차일수(전년도미사용) */
+            , HAY.SUM_DAYS           AS sumDays /* 당해연도연차합계일수 */
+            , HAY.YRLY_USE_STRT_YMD   AS yrlyUseStrtYmd /* 연차사용시작일자 */
+            , HAY.YRLY_USE_END_YMD    AS yrlyUseEndYmd /* 연차사용종료일자 */
+            , HAY.MNTH_USE_STRT_YMD  AS mnthUseStrtYmd /* 월차용시작일자 */
+            , HAY.MNTH_USE_END_YMD   AS mnthUseEndYmd /* 월차사용종료일자 */
+            , HAY.USE_DAYS           AS useDays /* 사용일수 */
+            , HAY.EXTN_DAYS          AS extnDays /* 소멸일수 */
+            , HAY.UNSD_DAYS          AS unsdDays /* 미사용일수 */
+            , HAY.FRWR_DAYS          AS frwrDays /* 이월연차일수 */
+            , HAY.PYMN_DAYS          AS pymnDays /* 연차정산일수 */
+            , HAY.PYMN_YM            AS pymnYm /* 정산연월 */
+            , HAY.MNTH_DAYS          AS mnthDays /* 발생월차일수(월만근연차) */
+            , HAY.MNTH_PRE_FRWR_DAYS AS mnthPreFrwrDays /* 이월월차일수(전년도미사용) */
+            , HAY.MNTH_SUM_DAYS      AS mnthSumDays /* 당해연도월차합계일수 */
+            , HAY.MNTH_USE_DAYS      AS mnthUseDays /* 월차 사용일수 */
+            , HAY.MNTH_EXTN_DAYS     AS mnthExtnDays /* 월차 소멸일수 */
+            , HAY.MNTH_UNSD_DAYS     AS mnthUnsdDays /* 월사 미사용일수 */
+            , HAY.MNTH_FRWR_DAYS     AS mnthFrwrDays /* 월차 이월일수 */
+            , HAY.MNTH_PYMN_DAYS     AS mnthPymnDays /* 월차 정산일수 */
+            , HAY.MNTH_PYMN_YM       AS mnthPymnYm /* 월차 정산연월 */
+            , HAY.BASE_DAYS          AS baseDays /* 기본연차발생일수 */
+            , HAY.CNSR_DAYS          AS cnsrDays /* 연차보전일수 */
+            , HAY.NRML_AMT           AS nrmlAmt /* 통상임금 */
+            , HAY.DLY_AMT            AS dlyAmt /* 일급 */
+            , HAY.YRLY_AMT           AS yrlyAmt /* 연차수당 */
+            , HAY.MNTH_YRLY_AMT      AS mnthYrlyAmt /* 월차수당 */
+            , HAY.SLRY_ATRB_YM       AS slryAtrbYm /* 지급기준연월 */
+            , HAY.SLRY_GB_CD         AS slryGbCd /* 지급구분코드 */
+            , HAY.SLRY_SEQ           AS slrySeq /* 지급차수 */
+            , HAY.PYMN_YMD           AS pymnYmd /* 지급일자 */
+            , HAY.HLTH_DAYS          AS hlthDays /* 보건발생일수 */
+            , HAY.HLTH_USE_DAYS      AS hlthUseDays /* 보건사용일수 */            
+            , HAY2.SUM_DAYS 			AS prvsSumDays /*전년도연차합계일수*/
+            , HAY2.USE_DAYS 			AS prvsUseDays /*전년도사용일수*/
+            , HAY2.EXTN_DAYS         AS prvsExtnDays /*전년도소멸일수*/
+            , HAY2.UNSD_DAYS 		AS prvsUnsdDays /*전년도미사용일수*/
+            , HPM.EMPL_NM			AS emplNm /*성명*/
+            , CASE WHEN HAY.DPRT_CD IS NULL THEN CDM.DPRT_NM		
+                        ELSE F_HR_DPRT_NM(HAY.CRPR_CD, HAY.DPRT_CD, HAY.ATRB_YY || '0101') END AS dprtNm /*부서명*/
+            , HPMH.ORGN_SITE_CD			AS orgnSiteCd /*원소속사업장코드*/
+            , ASM.SITE_NM			AS orgnSiteNm /*원소속사업장명칭*/
+            , HPD.ENLS_YMD AS enlsYmd /* 입대일자 */
+            , HPD.DSCH_YMD AS dschYmd /* 제대일자 */
+    FROM HR_PRSN_MSTR HPM
+     LEFT OUTER JOIN HR_PRSN_MSTR_HSTR HPMH
+        ON HPM.CRPR_CD = HPMH.CRPR_CD
+      AND HPM.EMPL_NO = HPMH.EMPL_NO
+      AND HPMH.STRT_YMD  = (SELECT MAX(STRT_YMD) FROM HR_PRSN_MSTR_HSTR
+                                               WHERE CRPR_CD = HPMH.CRPR_CD
+                                                     AND EMPL_NO = HPMH.EMPL_NO
+                                                     AND STRT_YMD &lt;= #{atrbYy, jdbcType=VARCHAR} || '1231')
+     LEFT OUTER JOIN HR_PRSN_DTLS HPD      
+     ON HPD.CRPR_CD = HPM.CRPR_CD 
+     AND HPD.EMPL_NO = HPM.EMPL_NO 
+     LEFT OUTER JOIN CM_DPRT_MSTR CDM 
+        ON HPMH.CRPR_CD = CDM.CRPR_CD
+      AND HPMH.DPRT_CD = CDM.DPRT_CD
+     LEFT OUTER JOIN AC_SITE_MSTR ASM 
+        ON HPMH.CRPR_CD = ASM.CRPR_CD
+      AND HPMH.ORGN_SITE_CD = ASM.SITE_CD
+     LEFT OUTER JOIN HR_ABSN_YRLY  HAY
+        ON HPM.CRPR_CD = HAY.CRPR_CD 
+      AND HPM.EMPL_NO = HAY.EMPL_NO 
+      AND HAY.ATRB_YY = #{atrbYy, jdbcType=VARCHAR} /* 귀속연도 */
+     LEFT OUTER JOIN HR_ABSN_YRLY HAY2
+	    ON HAY.CRPR_CD = HAY2.CRPR_CD 
+      AND HAY.EMPL_NO = HAY2.EMPL_NO 
+      AND HAY2.ATRB_YY = #{atrbYy, jdbcType=VARCHAR} - 1
+ WHERE HPM.CRPR_CD = #{crprCd, jdbcType=VARCHAR}
+       AND ((HPM.RTRM_YMD IS NULL) OR (HPM.RTRM_YMD &gt; #{atrbYy, jdbcType=VARCHAR}||'0101'))
+       AND HPM.JOIN_YMD &lt;= #{atrbYy, jdbcType=VARCHAR} || '1231'
+       AND HPM.DPRT_CD IS NOT NULL
+       AND HPM.YRLY_BASE_YMD IS NOT NULL
+       <if test="orgnSiteCd != null and orgnSiteCd != ''">
+       AND HPMH.ORGN_SITE_CD = #{orgnSiteCd, jdbcType=VARCHAR}
+       </if>
+       <if test="dprtCd != null and dprtCd != ''">
+       AND NVL(HAY.DPRT_CD, HPMH.DPRT_CD) = #{dprtCd, jdbcType=VARCHAR}
+       </if>
+       <if test="workStCd != null and workStCd != ''">
+       AND HPMH.WORK_ST_CD = #{workStCd, jdbcType=VARCHAR}
+       </if>
+       <if test="emplGbCd != null and emplGbCd != ''">
+       AND NVL(HAY.EMPL_GB_CD, HPMH.EMPL_GB_CD) = #{emplGbCd, jdbcType=VARCHAR}
+       </if>
+       <if test="srchVl != null and srchVl != ''">
+       AND (HPM.EMPL_NO LIKE '%' || UPPER(TRIM(#{srchVl, jdbcType=VARCHAR})) || '%' 
+         OR  UPPER(TRIM(REPLACE (HPM.EMPL_NM, ' ', ''))) LIKE '%' || UPPER(TRIM(#{srchVl, jdbcType=VARCHAR})) || '%' 
+               )
+       </if>
+ ORDER BY HPM.EMPL_NO&#13;
+</select>

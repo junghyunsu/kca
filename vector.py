@@ -6,8 +6,6 @@ from langchain_community.vectorstores import FAISS
 embeddings = OpenAIEmbeddings()
 # 공통 정보를 벡터 저장소에 저장
 vector_texts = [
-    "공통 부분(코드): 이부분은 공통 코드 영역입니다.",
-    "공통 부분(메타): 이 부분은 공통 메타 영역입니다.",
     "나의 정보(직장): 프리랜서",
     "나의 정보(직업): 엔지니어",
     "나의 정보(이름): 정현수",
@@ -17,10 +15,12 @@ vector_texts = [
 # 추가: 여러 파일의 내용을 `vector_texts` 리스트에 추가
 file_paths = [
     "bxm_sample/SSMP1001A.java",
+    "bxm_sample/MSmpEmpInfMng.java",
     "bxm_sample/SHRABSN10101In.omm",
     "bxm_sample/SHRABSN10101Out.omm",
     "bxm_sample/SHRABSN10101Sub.omm",
-    "bxm_sample/DHRAbsnYrly01IO.omm"
+    "bxm_sample/DHRAbsnYrly01IO.omm",
+    "bxm_sample/selectAbsnYrlyList.sql",
 ]
 
 for file_path in file_paths:

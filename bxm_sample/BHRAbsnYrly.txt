@@ -1,0 +1,8 @@
+아래 조건을 만족하는 Bean function 코드를 생성해 주되, 답변은 function 코드만 보여줘
+function: SHRABSN10101,   logicalName: 연차내역 조회, description: 연차내역 조회
+In : DHRAbsnYrly01IO , Out : List<DHRAbsnYrly01IO>
+
+로직:
+DHRAbsnYrly01 Bean 객체 생성, 이 개체는 DHRAbsnYrly01IO를 parater로 사용 리턴 값은 List<DHRAbsnYrly01IO> 임
+Bean.selectYrlyList(HRAbsnYrly01IO) 호출
+위 호출 결과를 function 결과로 리턴

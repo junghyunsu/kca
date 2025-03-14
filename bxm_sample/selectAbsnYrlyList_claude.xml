@@ -1,0 +1,66 @@
+<select id="selectAbsnYrlyList" parameterType="map" resultType="bwg.absn.dao.dto.DHRAbsnYrly01IO">
+SELECT 
+    a.CRPR_CD                AS CRPR_CD,
+    a.EMPL_NO                AS EMPL_NO,
+    m.EMPL_NM                AS EMPL_NM,
+    d.DPRT_NM                AS DPRT_NM,
+    s.SITE_NM                AS SITE_NM,
+    m.JOIN_YMD               AS JOIN_YMD,
+    m.GRP_JOIN_YMD           AS GRP_JOIN_YMD,
+    m.YRLY_BASE_YMD          AS YRLY_BASE_YMD,
+    m.RTRM_YMD               AS RTRM_YMD,
+    a.ATRB_YY                AS ATRB_YY,
+    a.ATRB_MM                AS ATRB_MM,
+    a.BASE_YMD               AS BASE_YMD,
+    a.CLCL_YMD               AS CLCL_YMD,
+    a.TTL_LNGV_DAYS          AS TTL_LNGV_DAYS,
+    a.LNGV_YRS               AS LNGV_YRS,
+    a.YRLY_DAYS              AS YRLY_DAYS,
+    a.USE_DAYS               AS USE_DAYS,
+    a.EXTN_DAYS              AS EXTN_DAYS,
+    a.UNSD_DAYS              AS UNSD_DAYS,
+    h.PSTN_CD                AS PSTN_CD,
+    h.EMPL_GB_CD             AS EMPL_GB_CD,
+    h.WORK_ST_CD             AS WORK_ST_CD,
+    dt.ENLS_YMD              AS ENLS_YMD,
+    dt.DSCH_YMD              AS DSCH_YMD
+FROM 
+    HR_ABSN_YRLY a
+JOIN 
+    HR_PRSN_MSTR m ON a.CRPR_CD = m.CRPR_CD AND a.EMPL_NO = m.EMPL_NO
+LEFT JOIN 
+    CM_DPRT_MSTR d ON a.CRPR_CD = d.CRPR_CD AND a.DPRT_CD = d.DPRT_CD
+LEFT JOIN 
+    AC_SITE_MSTR s ON m.CRPR_CD = s.CRPR_CD AND m.ORGN_SITE_CD = s.SITE_CD
+LEFT JOIN 
+    HR_PRSN_DTLS dt ON a.CRPR_CD = dt.CRPR_CD AND a.EMPL_NO = dt.EMPL_NO
+LEFT JOIN 
+    (SELECT CRPR_CD, EMPL_NO, STRT_YMD, DPRT_CD, PSTN_CD, EMPL_GB_CD, WORK_ST_CD, 
+            ROW_NUMBER() OVER(PARTITION BY CRPR_CD, EMPL_NO ORDER BY STRT_YMD DESC) AS RN
+     FROM HR_PRSN_MSTR_HSTR
+     WHERE STRT_YMD <= SYSDATE) h ON a.CRPR_CD = h.CRPR_CD AND a.EMPL_NO = h.EMPL_NO AND h.RN = 1
+WHERE 1=1
+    <if test="crprCd != null and crprCd != ''">
+    AND a.CRPR_CD = #{crprCd}
+    </if>
+    <if test="emplNo != null and emplNo != ''">
+    AND a.EMPL_NO = #{emplNo}
+    </if>
+    <if test="dprtCd != null and dprtCd != ''">
+    AND a.DPRT_CD = #{dprtCd}
+    </if>
+    <if test="atrbYy != null and atrbYy != ''">
+    AND a.ATRB_YY = #{atrbYy}
+    </if>
+    <if test="includeLastYear != null and includeLastYear == true">
+    AND a.ATRB_YY IN (#{atrbYy}, TO_CHAR(TO_DATE(#{atrbYy}, 'YYYY') - 1, 'YYYY'))
+    </if>
+    <if test="workStCd != null and workStCd != ''">
+    AND h.WORK_ST_CD = #{workStCd}
+    </if>
+    <if test="siteCd != null and siteCd != ''">
+    AND m.ORGN_SITE_CD = #{siteCd}
+    </if>
+ORDER BY 
+    a.CRPR_CD, a.EMPL_NO, a.ATRB_YY DESC
+</select>

@@ -30,12 +30,18 @@ def get_context(objectType: str) -> list[str]:
         "[BxmBean Code Sample]",
         "DHRAbsnYrly01IO"
     ]
+    dbio_search_terms = [
+        "[selectAbsnYrlyList 참조 테이블]"
+    ]
+
 
     # objectType 값에 따라 적절한 searchTerms 선택
     if objectType.lower() == "service":
         searchTerms = service_search_terms
     elif objectType.lower() == "bean":
         searchTerms = bean_search_terms
+    elif objectType.lower() == "dbio":
+        searchTerms = dbio_search_terms
     else:
         searchTerms = []  # 잘못된 입력에 대한 기본값 처리
 
@@ -51,9 +57,9 @@ def run_openai_chat(bxmInput: BxmInput, sessionId: str = "conversation_session")
 
     # 프롬프트 템플릿 설정 (context를 system 메시지 내부에 포함)
     prompt = ChatPromptTemplate.from_messages([
-        ("system", """You are an AI code generator. Below is a sample format for code generation. 
-    Use this format as a reference to generate the appropriate code.
-    Refer to the sample code format as well as the input (In) and output (Out) structures used for user queries:
+        ("system", """You are an AI code generator.
+Below is the necessary information for generating the requested code, including Code Samples, In/Out structures, or Table structures required for SQL generation.
+Refer to this information to generate the appropriate code.:
     {context}"""),
         MessagesPlaceholder(variable_name="history"),  # 히스토리만 Placeholder로 유지
         ("human", "{input}")
