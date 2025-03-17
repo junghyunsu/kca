@@ -14,13 +14,13 @@ vector_texts = [
 
 # 추가: 여러 파일의 내용을 `vector_texts` 리스트에 추가
 file_paths = [
-    "bxm_sample/SSMP1001A.java",
-    "bxm_sample/MSmpEmpInfMng.java",
-    "bxm_sample/SHRABSN10101In.omm",
-    "bxm_sample/SHRABSN10101Out.omm",
-    "bxm_sample/SHRABSN10101Sub.omm",
-    "bxm_sample/DHRAbsnYrly01IO.omm",
-    "bxm_sample/selectAbsnYrlyList.sql",
+    "bxm_sample/bxm/service/SSMP1001A.java",
+    "bxm_sample/bxm/bean/MSmpEmpInfMng.java",
+    "bxm_sample/bxm/dto/SHRABSN10101In.omm",
+    "bxm_sample/bxm/dto/SHRABSN10101Out.omm",
+    "bxm_sample/bxm/dto/SHRABSN10101Sub.omm",
+    "bxm_sample/bxm/dto/DHRAbsnYrly01IO.omm",
+    "bxm_sample/bxm/dbio/selectAbsnYrlyList.sql",
 ]
 
 for file_path in file_paths:

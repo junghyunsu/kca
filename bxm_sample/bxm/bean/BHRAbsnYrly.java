@@ -1,4 +1,4 @@
-package bwg.absn.bc;
+package bxm.bean;
 
 import java.math.BigDecimal;
 import java.util.List;

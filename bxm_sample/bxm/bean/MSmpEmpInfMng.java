@@ -1,3 +1,4 @@
+package bxm.bean;
 [BxmBean Code Sample]
 @BxmBean
 @BxmCategory(logicalName = "Employee Info Management")
