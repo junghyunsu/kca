@@ -1,0 +1,14 @@
+1. 환경설정조회 이벤트 (SHRABSN12001)
+  searchRef에서 검색 조건을 가져와 서비스 요청 파라미터로 사용.
+  $serviceHooks.callService("SHRABSN12001", svcParam)를 호출하여 데이터를 조회.
+  응답 데이터(`response.sub01`)를 grdAbsnYrly.current?.addAllData(response.sub01)를 통해 그리드에 반영.
+  기존 데이터는 grdAbsnYrly.current?.dp?.clearRows()를 사용하여 초기화.
+2. 그리드 설정
+  grdAbsnYrly_Cols`에 정의된 컬럼을 사용하여 데이터를 표시.
+  onDataLoadComplated 이벤트에서 emplNm 필드의 인덱스를 구하여 고정 컬럼 설정.
+3. useEffect 내부 초기 조회 처리
+   useEffect에서 viewEvent.setSrchPrpr()을 호출하여 초기 검색 조건을 설정.
+   grantEvent.search()를 호출하여 초기 데이터 조회.
+4. 기능 구현 시 유지할 사항
+   Sample에서 사용된 구조 (BwgGrid, useService, useRef, useEffect, grantEvent, serviceEvent)를 그대로 유지.
+   searchRef,  $formUtils, $serviceHooks 등의 기존 유틸리티 사용.

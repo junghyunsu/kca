@@ -1,0 +1,277 @@
+[Grid Column 정의]
+  const grdCnfgList_Cols: BwgGridColProps[] = [
+    {
+      name: "crprCd",
+      fieldName: "crprCd",
+      header: { text: "법인코드" },
+      visible: false,
+    },
+    {
+      name: "menuCd",
+      fieldName: "menuCd",
+      header: { text: "메뉴코드" },
+      visible: false,
+    },
+    {
+      name: "menuNm",
+      fieldName: "menuNm",
+      header: { text: "기준분류" },
+      visible: false,
+    },
+    {
+      name: "cnfgCd",
+      fieldName: "cnfgCd",
+      header: { text: "설정코드" },
+      visible: false,
+    },
+    {
+      name: "cnfgNm",
+      fieldName: "cnfgNm",
+      header: { text: "기준항목" },
+      width: 100,
+      styleName: realFormat.left,
+      editable: false,
+      footer: realFormat.count,
+    },
+    {
+      name: "CharVl",
+      fieldName: "CharVl",
+      header: { text: "항목코드" },
+      visible: false,
+    },
+    {
+      name: "mngmCd",
+      fieldName: "mngmCd",
+      header: { text: "항목코드" },
+      visible: false,
+    },
+    {
+      name: "mngmNm",
+      fieldName: "mngmNm",
+      header: { text: "항목명칭" },
+      width: 100,
+      styleName: realFormat.left,
+      button: "action",
+    },
+    {
+      name: "numVl",
+      fieldName: "numVl",
+      header: { text: "설정값(숫자)" },
+      visible: false,
+    },
+    {
+      name: "addSetDscr",
+      fieldName: "addSetDscr",
+      header: { text: "추가항목" },
+      width: 80,
+    },
+    {
+      name: "inptDscr",
+      fieldName: "inptDscr",
+      header: { text: "설명" },
+      width: 400,
+      styleName: realFormat.left,
+      editable: false,
+    },
+  ]
+
+  const grdYrlyInfo_Cols: BwgGridColProps[] = [
+    {
+      name: "crprCd",
+      fieldName: "crprCd",
+      header: { text: "법인코드" },
+      visible: false,
+    },
+    {
+      name: "baseYmd",
+      fieldName: "baseYmd",
+      header: { text: "기준일자" },
+      visible: false,
+    },
+    {
+      name: "siteCd",
+      fieldName: "siteCd",
+      header: { text: "사업장코드" },
+      visible: false,
+    },
+    {
+      name: "siteNm",
+      fieldName: "siteNm",
+      header: { text: "사업장명칭" },
+      width: 120,
+      styleName: realFormat.left,
+      editable: false,
+      footer: realFormat.count,
+    },
+    {
+      name: "baseYmdGbCd",
+      fieldName: "baseYmdGbCd",
+      header: { text: "근속연수기준" },
+      width: 100,
+      styleName: realFormat.left,
+      list: $codeHooks.getCodeList("HR324", undefined, true),
+      lookupDisplay: true,
+      editor: realFormat.lookup,
+    },
+    {
+      name: "mnthBaseGbCd",
+      fieldName: "mnthBaseGbCd",
+      header: { text: "월차지급기준" },
+      width: 100,
+      styleName: realFormat.left,
+      list: $codeHooks.getCodeList("HR323", undefined, true),
+      lookupDisplay: true,
+      editor: realFormat.lookup,
+    },
+    {
+      name: "mnthUseGbCd",
+      fieldName: "mnthUseGbCd",
+      header: { text: "월차사용기간" },
+      width: 100,
+      styleName: realFormat.left,
+      list: $codeHooks.getCodeList("HR319", undefined, true),
+      lookupDisplay: true,
+      editor: realFormat.lookup,
+    },
+    {
+      name: "mnth1yrGbCd",
+      fieldName: "mnth1yrGbCd",
+      header: { text: "1년만근연차" },
+      width: 100,
+      styleName: realFormat.left,
+      list: $codeHooks.getCodeList("HR318", undefined, true),
+      lookupDisplay: true,
+      editor: realFormat.lookup,
+    },
+    {
+      name: "yrlyBaseGbCd",
+      fieldName: "yrlyBaseGbCd",
+      header: { text: "연차지급시기" },
+      width: 100,
+      styleName: realFormat.left,
+      list: $codeHooks.getCodeList("HR320", undefined, true),
+      lookupDisplay: true,
+      editor: realFormat.lookup,
+    },
+    {
+      name: "yrlyUseGbCd",
+      fieldName: "yrlyUseGbCd",
+      header: { text: "연차사용기간" },
+      width: 100,
+      styleName: realFormat.left,
+      list: $codeHooks.getCodeList("HR320", undefined, true),
+      lookupDisplay: true,
+      editor: realFormat.lookup,
+    },
+    {
+      fieldName: "armInfo",
+      direction: "horizontal",
+      header: { text: "군경력정보" },
+      editable: false,
+      children: [
+        {
+          name: "armCrrInclYn",
+          fieldName: "armCrrInclYn",
+          header: { text: "경력포함여부" },
+          width: 60,
+          editable: false,
+          renderer: realFormat.checkY,
+        },
+        {
+          name: "armAdedYn",
+          fieldName: "armAdedYn",
+          header: { text: "가산연차여부" },
+          width: 60,
+          editable: false,
+          renderer: realFormat.checkY,
+        },
+      ],
+    },
+    {
+      fieldName: "cnsrInfo",
+      direction: "horizontal",
+      header: { text: "보상연차정보" },
+      editable: false,
+      children: [
+        {
+          name: "cnsrPymnYn",
+          fieldName: "cnsrPymnYn",
+          header: { text: "지급여부" },
+          width: 60,
+          editable: false,
+          renderer: realFormat.checkY,
+        },
+        {
+          name: "cnsrBaseDays",
+          fieldName: "cnsrBaseDays",
+          header: { text: "기준일수" },
+          width: 60,
+          styleName: realFormat.right,
+          dataType: ValueType.NUMBER,
+          numberFormat: realFormat.number2,
+        },
+        {
+          name: "cnsrPymnDays",
+          fieldName: "cnsrPymnDays",
+          header: { text: "지급일수" },
+          width: 60,
+          styleName: realFormat.right,
+          dataType: ValueType.NUMBER,
+          numberFormat: realFormat.number2,
+        },
+      ],
+    },
+    {
+      fieldName: "pymnInfo",
+      direction: "horizontal",
+      header: { text: "연차수당정보" },
+      editable: false,
+      children: [
+        {
+          name: "yrlyPymnYn",
+          fieldName: "yrlyPymnYn",
+          header: { text: "지급여부" },
+          width: 60,
+          visible: true,
+          editable: false,
+          renderer: realFormat.checkY,
+        },
+        {
+          name: "yrlyPymnGbCd",
+          fieldName: "yrlyPymnGbCd",
+          header: { text: "지급시기" },
+          width: 100,
+          styleName: realFormat.left,
+          list: $codeHooks.getCodeList("HR322", undefined, true),
+          lookupDisplay: true,
+          editor: realFormat.lookup,
+        },
+      ],
+    },
+    {
+      name: "rmrk",
+      fieldName: "rmrk",
+      header: { text: "비고" },
+      width: 150,
+      styleName: realFormat.left,
+    },
+  ]
+
+아래 기술한 내용으로 소스 HRAbsnYrlyInfoM01.tsx 생성해줘. 답변시 소스코드만 보여줘
+
+1. 조회 이벤트 (SHRABSN10101)
+  searchRef에서 검색 조건을 가져와 서비스 요청 파라미터로 사용.
+  $serviceHooks.callService("SHRABSN10101", svcParam)를 호출하여 데이터를 조회.
+  응답 데이터(`response.sub01`)를 grdCnfgList.current?.addAllData(response.sub01)를 통해 그리드에 반영.
+  기존 데이터는 grdCnfgList.current?.dp?.clearRows()를 사용하여 초기화.
+2. 그리드 설정
+  grdCnfgList(grdCnfgList_Cols)
+  grdYrlyInfo(grdYrlyInfo_Cols)
+  onDataLoadComplated 이벤트에서 emplNm 필드의 인덱스를 구하여 고정 컬럼 설정.
+3. useEffect 내부 초기 조회 처리
+   useEffect에서 viewEvent.setSrchPrpr()을 호출하여 초기 검색 조건을 설정.
+   grantEvent.search()를 호출하여 초기 데이터 조회.
+4. 기능 구현 시 유지할 사항
+   Sample에서 사용된 구조 (BwgGrid, useService, useRef, useEffect, grantEvent, serviceEvent)를 그대로 유지.
+   searchRef, grdAbsnYrly, $formUtils, $serviceHooks 등의 기존 유틸리티 사용.
+위 요구사항을 반영하여 SHRABSN10101 메서드를 구현해줘.
