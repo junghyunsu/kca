@@ -58,7 +58,7 @@ def continew_dev(continueDevInput: ContnueDevInput):
 
 
 @kca.post("/test/")
-def continew_dev(continueDevInput: ContnueDevInput):
+def test(continueDevInput: ContnueDevInput):
     print(f"body: {continueDevInput}")
 
 # API 서버 실행

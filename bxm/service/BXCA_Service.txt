@@ -1,0 +1,119 @@
+
+아래 조건을 만족하는 Operation 코드를 생성해주되 답변은 코드만 보여줘
+
+Id:  ssmpemptst1001a002, logicalName : 직원정보 추가
+In : SSmpEmpTst1001A002InDto, Out : SSmpEmpTst1001A002OutDto
+
+로직:
+MSmpEmpTstBean001 Bean 객체 (MSmpEmpTstBean001InDto를 parater로 사용) 생성, 리턴 값은 int
+Bean.insertEmp(SSmpEmpTst1001A002InDto) 호출 리턴 값은 int
+SSmpEmpTst1001A002OutDto DTO를 생성하고 bean 호출 리턴 값을 SSmpEmpTst1001A002OutDto에 복사 
+
+/**
+ * 직원 정보 추가 Operation 코드
+ *
+ * @param input SSmpEmpTst1001A002InDto
+ * @return SSmpEmpTst1001A002OutDto
+ * @throws DefaultApplicationException
+ */
+@BxmCategory(logicalName = "직원정보 추가", description = "Employee Info Addition")
+public SSmpEmpTst1001A002OutDto addEmpInfo(SSmpEmpTst1001A002InDto input) throws DefaultApplicationException {
+
+    logger.debug("============== START ==============");
+    logger.debug("input = {}", input);
+
+    /**
+     * @BXMType VariableDeclaration
+     */
+    int insertCnt = 0;
+    MSmpEmpTstBean001 bean = DefaultApplicationContext.getBean(MSmpEmpTstBean001.class);
+
+    /**
+     * @BXMType Try
+     * @Desc Bean 호출로 직원 정보 추가
+     */
+    try {
+        /**
+         * @BXMType DbioCall
+         * @Desc Bean.insertEmp 호출
+         */
+        insertCnt = bean.insertEmp(input);
+
+    } catch (DasDuplicateKeyException de) {
+        /**
+         * @BXMType ApplicationException
+         * @Desc 중복된 직원 ID가 존재할 경우 예외 발생
+         */
+        throw new DefaultApplicationException("BXME60007", new Object[] { input.getFeduEmpNo() });
+    }
+
+    logger.debug("output = {}", insertCnt);
+    logger.debug("============== END ==============");
+
+    SSmpEmpTst1001A002OutDto outputDto = new SSmpEmpTst1001A002OutDto();
+    outputDto.setInsertCnt(insertCnt);
+
+    return outputDto;
+}
+
+
+--------------------------------------------- In/Out 정보 추가 ---------------------------------
+
+[참조 사항]
+OMM bxcodesmp.com.sample.service.io.SSmpEmpTst1001A002OutDto
+< logicalName= "직원정보 추가 응답" description=""
+>
+{
+	Integer insertCount < length=4 description="처리건수" > ;
+}
+
+아래 조건을 만족하는 Operation 코드를 생성해주되 답변은 코드만 보여줘
+
+Id:  ssmpemptst1001a002, logicalName : 직원정보 추가
+In : SSmpEmpTst1001A002InDto, Out : SSmpEmpTst1001A002OutDto
+
+로직:
+MSmpEmpTstBean001 Bean 객체 (MSmpEmpTstBean001InDto를 parater로 사용) 생성, 리턴 값은 int
+Bean.insertEmp(SSmpEmpTst1001A002InDto) 호출 리턴 값은 int
+SSmpEmpTst1001A002OutDto DTO를 생성하고 bean 호출 리턴 값을 SSmpEmpTst1001A002OutDto에 복사 
+
+
+/**
+ * 직원 정보 추가 서비스 오퍼레이션
+ * @param input
+ * @return
+ * @throws DefaultApplicationException
+ */
+@BxmServiceOperation("ssmpemptst1001a002")
+@BxmCategory(logicalName = "직원정보 추가", description = "")
+public SSmpEmpTst1001A002OutDto ssmpemptst1001a002(SSmpEmpTst1001A002InDto input)
+        throws DefaultApplicationException {
+
+    logger.debug("============== SERVICE START ==============");
+    logger.debug("input = {}", input);
+
+    MSmpEmpTstBean001 mSmpEmpTstBean001 = DefaultApplicationContext.getBean(MSmpEmpTstBean001.class);
+
+    /**
+     * @BXMType VariableDeclaration
+     */
+    SSmpEmpTst1001A002OutDto output = new SSmpEmpTst1001A002OutDto();
+
+    /**
+     * @BXMType VariableDeclaration
+     */
+    int insertCount = 0;
+
+    /**
+     * @BXMType BeanCall
+     * @Desc Call bean method to insert employee data
+     */
+    insertCount = mSmpEmpTstBean001.insertEmp(input);
+
+    output.setInsertCount(insertCount);
+
+    logger.debug("output = {}", output);
+    logger.debug("============== SERVICE END ==============");
+
+    return output;
+}

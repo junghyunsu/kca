@@ -1,0 +1,28 @@
+[테이블 구조]
+
+CREATE TABLE SMP_EMP_TST (
+    fedu_emp_no      INT(4) NOT NULL COMMENT 'FW샘플 임직원번호',
+    fedu_emp_nm      VARCHAR(10) NOT NULL COMMENT 'FW샘플 임직원명',
+    fedu_occp_nm     VARCHAR(9) NOT NULL COMMENT 'FW샘플 직업명',
+    fedu_mngr_emp_no DECIMAL(4,0) DEFAULT NULL COMMENT 'FW샘플 관리자임직원번호',
+    fedu_hire_dt     CHAR(8) NOT NULL COMMENT 'FW샘플 입사일자 (YYYYMMDD)',
+    fedu_pay_amt     DECIMAL(19,2) DEFAULT NULL COMMENT 'FW샘플 급여금액',
+    fedu_dept_no     DECIMAL(2,0) DEFAULT NULL COMMENT 'FW샘플 부서번호',
+    PRIMARY KEY (fedu_emp_no)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='샘플용직원정보TST 출력';
+
+다음의 테이블을 이용하여 SQL 쿼리를 생성해줘:
+- SMP_EMP_TST (샘플용직원정보 테이블)
+
+요구사항:
+1. 부서번호를 조건으로 검색
+2. 모든 필드를  포함해야 해.
+
+mybatis 스타일의 SQL 쿼리만 작성해줘.
+
+
+<select id="selectEmployeesByDeptNo" resultType="SMP_EMP_TST">
+    SELECT fedu_emp_no, fedu_emp_nm, fedu_occp_nm, fedu_mngr_emp_no, fedu_hire_dt, fedu_pay_amt, fedu_dept_no
+    FROM SMP_EMP_TST
+    WHERE fedu_dept_no = #{deptNo}
+</select>
