@@ -5,6 +5,7 @@ from pydantic import BaseModel
 class BxmInput(BaseModel):
     object_type: str
     query: str
+    isStreaming: bool = True
 
 class ContnueDevInput(BaseModel):
     query: str

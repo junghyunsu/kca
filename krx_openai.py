@@ -3,7 +3,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables import RunnableWithMessageHistory
 from dotenv import load_dotenv
-import os
+from typing import Generator, Union
 
 # session_manager.py에서 세션 관리 기능 불러오기
 from session_manager import get_session_history
@@ -34,7 +34,6 @@ def get_context(objectType: str) -> list[str]:
         "[selectAbsnYrlyList 참조 테이블]"
     ]
 
-
     # objectType 값에 따라 적절한 searchTerms 선택
     if objectType.lower() == "service":
         searchTerms = service_search_terms
@@ -51,17 +50,24 @@ def get_context(objectType: str) -> list[str]:
     return context
 
 
-def run_openai_chat(bxmInput: BxmInput, sessionId: str = "conversation_session") -> str:
+def run_openai_chat(bxmInput: BxmInput, sessionId: str = "conversation_session") -> Union[str, Generator[str, None, None]]:
+    """
+    LLM 호출 시 Streaming 여부를 결정하여 처리하는 함수
+    - isStreaming=True: 부분 응답을 실시간으로 Streaming (Generator 사용)
+    - isStreaming=False: 전체 응답을 한 번에 반환
+    """
     # OpenAI 모델 설정
-    chat = ChatOpenAI(model_name="gpt-4.5-preview", verbose=True,  temperature=0.7)
+    # chat = ChatOpenAI(model_name="gpt-4.5-preview", verbose=True, temperature=0.7)
+    chat = ChatOpenAI(model_name="gpt-4o-mini", verbose=True, temperature=0.7)
 
-    # 프롬프트 템플릿 설정 (context를 system 메시지 내부에 포함)
+
+    # 프롬프트 템플릿 설정
     prompt = ChatPromptTemplate.from_messages([
         ("system", """You are an AI code generator.
 Below is the necessary information for generating the requested code, including Code Samples, In/Out structures, or Table structures required for SQL generation.
 Refer to this information to generate the appropriate code.:
     {context}"""),
-        MessagesPlaceholder(variable_name="history"),  # 히스토리만 Placeholder로 유지
+        MessagesPlaceholder(variable_name="history"),
         ("human", "{input}")
     ])
 
@@ -74,7 +80,6 @@ Refer to this information to generate the appropriate code.:
         get_session_history,  
         input_messages_key="input",
         history_messages_key="history"
-        # output_messages_key="response"
     )
 
     # context 가져오기
@@ -88,27 +93,42 @@ Refer to this information to generate the appropriate code.:
     )
     print(f"프롬프트:\n{formatted_prompt}")
 
-    # OpenAI 체인 실행
-    response = chain_with_history.invoke(
-        {
-            "context": context,
-            "input": bxmInput.query
-        },
-        config={
-            "configurable": {"session_id": sessionId},
-            "verbose": True
+    if bxmInput.isStreaming:
+        # Streaming 모드: 부분 응답을 실시간으로 전송
+        def generate_response():
+            streaming_response = chain_with_history.stream(
+                {
+                    "context": context,
+                    "input": bxmInput.query
+                },
+                config={
+                    "configurable": {"session_id": sessionId},
+                    "verbose": True
+                }
+            )
+            for chunk in streaming_response:
+                yield chunk.content  # 부분 응답을 실시간으로 반환
+                print(chunk.content, end="", flush=True)  # 실시간 출력
+        return generate_response()  # Generator 반환
+    else:
+        # 일반 모드: 전체 응답을 한 번에 반환
+        response = chain_with_history.invoke(
+            {
+                "context": context,
+                "input": bxmInput.query
+            },
+            config={
+                "configurable": {"session_id": sessionId},
+                "verbose": True
             }
-    )
+        )
 
-    # for debug
-    # history = get_session_history("conversation_session")
-    # for msg in history.get_messages():
-    #     print(f"{msg.type}: {msg.content}")
-    print(f"""------------------------Response---------------------------------------------
+        print(f"""------------------------Response---------------------------------------------
 {response.content}
 ----------------------------------------------------------------""", flush=True)
-          
-    return response.content  # AI 응답 반환
+
+        return response.content  # 일반 응답 반환
+
 
 
 def run_continue_dev_context(input_text: str, session_id: str = "conversation_session") -> list[str]:
