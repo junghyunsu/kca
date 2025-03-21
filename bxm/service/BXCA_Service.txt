@@ -1,119 +1,273 @@
+[참조할 Code sample]
+@BxmService("SSMP1001A")
+@BxmCategory(logicalName = "Single select")
+public class SSMP1001A {
+    final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-아래 조건을 만족하는 Operation 코드를 생성해주되 답변은 코드만 보여줘
+    private MSmpEmpInfMng mSmpEmpInfMng;
 
-Id:  ssmpemptst1001a002, logicalName : 직원정보 추가
-In : SSmpEmpTst1001A002InDto, Out : SSmpEmpTst1001A002OutDto
+    @BxmServiceOperation("ssmp1001a001")
+    @BxmCategory(logicalName = "Single select")
+    public SSMP1001A001OutDto ssmp1001a001(SSMP1001A001InDto input) throws DefaultApplicationException {
 
-로직:
-MSmpEmpTstBean001 Bean 객체 (MSmpEmpTstBean001InDto를 parater로 사용) 생성, 리턴 값은 int
-Bean.insertEmp(SSmpEmpTst1001A002InDto) 호출 리턴 값은 int
-SSmpEmpTst1001A002OutDto DTO를 생성하고 bean 호출 리턴 값을 SSmpEmpTst1001A002OutDto에 복사 
+        logger.debug("============== SERVICE START ==============");
+        logger.debug("input = {}", input);
 
-/**
- * 직원 정보 추가 Operation 코드
- *
- * @param input SSmpEmpTst1001A002InDto
- * @return SSmpEmpTst1001A002OutDto
- * @throws DefaultApplicationException
- */
-@BxmCategory(logicalName = "직원정보 추가", description = "Employee Info Addition")
-public SSmpEmpTst1001A002OutDto addEmpInfo(SSmpEmpTst1001A002InDto input) throws DefaultApplicationException {
+        mSmpEmpInfMng = DefaultApplicationContext.getBean(mSmpEmpInfMng, MSmpEmpInfMng.class);
 
-    logger.debug("============== START ==============");
-    logger.debug("input = {}", input);
-
-    /**
-     * @BXMType VariableDeclaration
-     */
-    int insertCnt = 0;
-    MSmpEmpTstBean001 bean = DefaultApplicationContext.getBean(MSmpEmpTstBean001.class);
-
-    /**
-     * @BXMType Try
-     * @Desc Bean 호출로 직원 정보 추가
-     */
-    try {
         /**
-         * @BXMType DbioCall
-         * @Desc Bean.insertEmp 호출
+         * @BXMType VariableDeclaration
          */
-        insertCnt = bean.insertEmp(input);
+        DSmpEmpTst000Dto beanInput = new DSmpEmpTst000Dto();
 
-    } catch (DasDuplicateKeyException de) {
         /**
-         * @BXMType ApplicationException
-         * @Desc 중복된 직원 ID가 존재할 경우 예외 발생
+         * @BXMType VariableDeclaration
          */
-        throw new DefaultApplicationException("BXME60007", new Object[] { input.getFeduEmpNo() });
+        SSMP1001A001OutDto output = new SSMP1001A001OutDto();
+
+        /**
+         * @BXMType IF
+         */
+        if (input.getFeduEmpNo().equals(BigDecimal.valueOf(9877))) {
+            logger.error("Pre-Deploy Test Exception for FeduEmpNo [9877].");
+            throw new DefaultApplicationException("BXME30000", new Object[] {},
+                    new Object[] { "Pre-Deploy Test Exception." });
+        }
+
+        /**
+         * @BXMType LogicalArea
+         * @Desc DTO mapping
+         */
+        {
+            beanInput.setFeduEmpNo(input.getFeduEmpNo());
+        }
+
+        /**
+         * @BXMType BeanCall
+         * @Desc Call bean single select method
+         */
+        DSmpEmpTst000Dto beanOutput = mSmpEmpInfMng.getEmpInf(beanInput);
+
+        /**
+         * @BXMType IF
+         * @Desc DTO mapping if bean out is not null
+         */
+        if (beanOutput != null) {
+            output.setFeduEmpNo(beanOutput.getFeduEmpNo());
+            output.setFeduEmpNm(beanOutput.getFeduEmpNm());
+            output.setFeduOccpNm(beanOutput.getFeduOccpNm());
+            output.setFeduMngrEmpNo(beanOutput.getFeduMngrEmpNo());
+            output.setFeduIpsaDt(beanOutput.getFeduIpsaDt());
+            output.setFeduPayAmt(beanOutput.getFeduPayAmt());
+            output.setFeduDeptNo(beanOutput.getFeduDeptNo());
+        }
+
+        /**
+         * @BXMType LogicalArea
+         * @Desc add message
+         */
+        {
+            DefaultApplicationContext.addMessage("BXMI60000", null, new Object[] {});
+        }
+
+        logger.debug("output = {}", output);
+        logger.debug("============== SERVICE END ==============");
+
+        return output;
     }
-
-    logger.debug("output = {}", insertCnt);
-    logger.debug("============== END ==============");
-
-    SSmpEmpTst1001A002OutDto outputDto = new SSmpEmpTst1001A002OutDto();
-    outputDto.setInsertCnt(insertCnt);
-
-    return outputDto;
 }
 
-
---------------------------------------------- In/Out 정보 추가 ---------------------------------
-
-[참조 사항]
-OMM bxcodesmp.com.sample.service.io.SSmpEmpTst1001A002OutDto
-< logicalName= "직원정보 추가 응답" description=""
+[코드 생성에 필요한 DTO 구조]
+OMM bwg.absn.dao.dto.DHRAbsnYrly01IO
+< description="연차관리 IO" logicalName = "연차관리 IO"
 >
 {
-	Integer insertCount < length=4 description="처리건수" > ;
+	String crprCd < length = 3 description = "법인코드" > ;
+	String atrbYy < length = 4 description = "귀속연도" > ;
+	String emplNo < length = 20 description = "사원번호" > ;
+	String atrbMm < length = 2 description = "귀속월" > ;
+	String baseYmd < length = 8 description = "기준일자" > ;
+	String clclYmd < length = 8 description = "계산일자" > ;
+	String joinYmd < length = 8 description = "입사일자" > ;
+	String grpJoinYmd < length = 8 description = "그룹입사일자" > ;
+	String yrlyBaseYmd < length = 8 description = "연차기산일자" > ;
+	String rtrmYmd < length = 8 description = "퇴직일자" > ;
+	String dprtCd < length = 20 description = "부서코드" > ;
+	String pstnCd < length = 20 description = "직위코드" > ;
+	Integer ttlLngvDays < length = 5 description = "총근속일수" > ;
+	Integer ttlLngvMnth < length = 5 description = "총근속개월수" > ;
+	Integer lngvYrs < length = 5 description = "근속연수" > ;
+	Integer lngvMnth < length = 5 description = "근속월수" > ;
+	Integer lngvDays < length = 5 description = "근속일수" > ;
+	BigDecimal adedDays < length = 6 decimal = 2 description = "가산연차일수" > ;
+	BigDecimal armAdedDays < length = 6 decimal = 2 description = "군가산일수" > ;
+	BigDecimal yrlyDays < length = 6 decimal = 2 description = "발생연차일수" > ;
+	BigDecimal preFrwrDays < length = 6 decimal = 2 description = "이월연차일수(전년도미사용)" > ;
+	BigDecimal sumDays < length = 6 decimal = 2 description = "당해연도연차합계일수" > ;
+	BigDecimal useDays < length = 6 decimal = 2 description = "사용일수" > ;
+	BigDecimal extnDays < length = 6 decimal = 2 description = "소멸일수" > ;
+	BigDecimal unsdDays < length = 6 decimal = 2 description = "미사용일수" > ;
+	BigDecimal frwrDays < length = 6 decimal = 2 description = "이월연차일수" > ;
+	BigDecimal pymnDays < length = 6 decimal = 2 description = "연차정산일수" > ;
+	String pymnYm < length = 6 description = "정산연월" > ;
+	BigDecimal mnthDays < length = 6 decimal = 2 description = "발생월차일수(월만근연차)" > ;
+	BigDecimal mnthPreFrwrDays < length = 6 decimal = 2 description = "이월월차일수(전년도미사용)" > ;
+	BigDecimal mnthSumDays < length = 6 decimal = 2 description = "당해연도월차합계일수" > ;
+	BigDecimal mnthUseDays < length = 6 decimal = 2 description = "월차 사용일수" > ;
+	BigDecimal mnthExtnDays < length = 6 decimal = 2 description = "월차 소멸일수" > ;
+	BigDecimal mnthUnsdDays < length = 6 decimal = 2 description = "월사 미사용일수" > ;
+	BigDecimal mnthFrwrDays < length = 6 decimal = 2 description = "월차 이월일수" > ;
+	BigDecimal mnthPymnDays < length = 6 decimal = 2 description = "월차 정산일수" > ;
+	String mnthPymnYm < length = 6 description = "월차 정산연월" > ;
+	String yrlyUseStrtYmd < length = 8 description = "연차사용시작일자" > ;
+	String yrlyUseEndYmd < length = 8 description = "연차사용종료일자" > ;
+	String mnthUseStrtYmd < length = 8 description = "월차사용시작일자" > ;
+	String mnthUseEndYmd < length = 8 description = "월차사용종료일자" > ;
+	BigDecimal baseDays < length = 6 decimal = 2 description = "기본연차발생일수" > ;
+	BigDecimal cnsrDays < length = 6 decimal = 2 description = "연차보전일수" > ;
+	BigDecimal nrmlAmt < length = 20 description = "통상임금" > ;
+	BigDecimal dlyAmt < length = 20 description = "일급" > ;
+	BigDecimal yrlyAmt < length = 20 description = "연차수당" > ;
+	BigDecimal mnthYrlyAmt < length = 20 description = "월차수당" > ;
+	String slryAtrbYm < length = 6 description = "지급기준연월" > ;
+	String slryGbCd < length = 20 description = "지급구분코드" > ;
+	Integer slrySeq < length = 5 description = "지급차수" > ;
+	String pymnYmd < length = 8 description = "지급일자" > ;
+	BigDecimal hlthDays < length = 6 decimal = 2 description = "보건발생일수" > ;
+	BigDecimal hlthUseDays < length = 6 decimal = 2 description = "보건사용일수" > ;
+	Date inptDt < length = 7 description = "입력일시" > ;
+	String inptId < length = 12 description = "입력자ID" > ;
+	Date chngDt < length = 7 description = "변경일시" > ;
+	String chngId < length = 12 description = "변경자ID" > ;
+	String emplNm < length = 100 description = "성명" > ;
+	String dprtNm < length = 100 description = "부서명칭" > ;
+	String emplGbCd < length = 20 description = "사원구분코드" > ;
+	String workStCd < length = 20 description = "근무상태코드" > ;
+	String orgnSiteCd < length = 20 description = "원소속사업장코드" > ;
+	String orgnSiteNm < length = 200 description = "원소속사업장명칭" > ;
+	String enlsYmd < length = 8 description = "입대일자" > ;
+	String dschYmd < length = 8 description = "제대일자" > ;
+	BigDecimal prvsSumDays < length = 6 decimal = 2 description = "전년도연차합계일수" > ;
+	BigDecimal prvsUseDays < length = 6 decimal = 2 description = "전년도사용일수" > ;
+	BigDecimal prvsExtnDays < length = 6 decimal = 2 description = "전년도소멸일수" > ;
+	BigDecimal prvsUnsdDays < length = 6 decimal = 2 description = "전년도미사용일수" > ;
+	String srchVl < length = 100 description = "검색어" > ;
+	String iudFlag < length = 1 description = "iud플래그" > ;
+	String baseYmdGbCd < length = 20 description = "근속년수기준구분코드" > ;
+	String mnthBaseGbCd < length = 20 description = "월차지급구분코드" > ;
+	String mnthUseGbCd < length = 20 description = "월차사용구분코드(기간)" > ;
+	String mnth1yrGbCd < length = 20 description = "1년만근연차" > ;
+	String yrlyBaseGbCd < length = 20 description = "연차지급구분코드" > ;
+	String yrlyUseGbCd < length = 20 description = "연차사용구분코드(기간)" > ;
+	String armCrrInclYn < length = 1 description = "군경력 경력포함 여부" > ;
+	String armAdedYn < length = 1 description = "군경력 가산연차 여부" > ;
+	String crrBaseYmd < length = 8 description = "근속년수기준일자" > ;
+	Integer mnthPrd < length = 5 description = "월차사용기간" > ;
+	String mnth1yrBaseDiv < length = 8 description = "1년만근 기준" > ;
+	String mnth1yrClclDiv < length = 8 description = "1년만근 계산식" > ;
+	String yrlyClclBaseDiv < length = 2 description = "연차수당지급기준" > ;
 }
 
-아래 조건을 만족하는 Operation 코드를 생성해주되 답변은 코드만 보여줘
+OMM bwg.absn.sc.dto.SHRABSN10101In
+< description="연월차관리 - 조회 In" logicalName = "연월차관리 - 조회 In"
+>
+{
+	String crprCd<length=3 description="법인코드">;
+	String atrbYy<length=4 description="귀속연도">;
+	String orgnSiteCd < length = 20 description = "원소속사업장코드" > ;
+	String dprtCd<length=20 description="부서코드">;
+	String workStCd<length=20 description="근무상태코드">;
+	String emplGbCd < length = 20 description = "사원구분코드" > ;
+	String srchVl < length = 100 description = "검색어" > ;
+}
 
-Id:  ssmpemptst1001a002, logicalName : 직원정보 추가
-In : SSmpEmpTst1001A002InDto, Out : SSmpEmpTst1001A002OutDto
+OMM bwg.absn.sc.dto.SHRABSN10101Out
+< description="연월차관리 - 조회 Out" logicalName = "연월차관리 - 조회 Out"
+>
+{
+	Integer sub01Cnt<length=4>;
+	bwg.absn.sc.dto.SHRABSN10101Sub sub01<length=20 arrayReference="sub01Cnt">;
+}
+
+OMM bwg.absn.sc.dto.SHRABSN10101Sub
+< description="연월차관리 - 조회 Sub" logicalName = "연월차관리 - 조회 Sub"
+>
+{
+	String crprCd < length = 3 description = "법인코드" > ;
+	String atrbYy < length = 4 description = "귀속연도" > ;
+	String emplNo < length = 20 description = "사원번호" > ;
+	String atrbMm < length = 2 description = "귀속월" > ;
+	String baseYmd < length = 8 description = "기준일자" > ;
+	String clclYmd < length = 8 description = "계산일자" > ;
+	String joinYmd < length = 8 description = "입사일자" > ;
+	String grpJoinYmd < length = 8 description = "그룹입사일자" > ;
+	String yrlyBaseYmd < length = 8 description = "연차기산일자" > ;
+	String rtrmYmd < length = 8 description = "퇴직일자" > ;
+	String dprtCd < length = 20 description = "부서코드" > ;
+	String pstnCd < length = 20 description = "직위코드" > ;
+	Integer ttlLngvDays < length = 5 description = "총근속일수" > ;
+	Integer ttlLngvMnth < length = 5 description = "총근속개월수" > ;
+	Integer lngvYrs < length = 5 description = "근속연수" > ;
+	Integer lngvMnth < length = 5 description = "근속월수" > ;
+	Integer lngvDays < length = 5 description = "근속일수" > ;
+	BigDecimal adedDays < length = 6 decimal = 2 description = "가산연차일수" > ;
+	BigDecimal armAdedDays < length = 6 decimal = 2 description = "군가산일수" > ;
+	BigDecimal yrlyDays < length = 6 decimal = 2 description = "발생연차일수" > ;
+	BigDecimal preFrwrDays < length = 6 decimal = 2 description = "이월연차일수(전년도미사용)" > ;
+	BigDecimal sumDays < length = 6 decimal = 2 description = "당해연도연차합계일수" > ;
+	BigDecimal useDays < length = 6 decimal = 2 description = "사용일수" > ;
+	BigDecimal extnDays < length = 6 decimal = 2 description = "소멸일수" > ;
+	BigDecimal unsdDays < length = 6 decimal = 2 description = "미사용일수" > ;
+	BigDecimal frwrDays < length = 6 decimal = 2 description = "이월연차일수" > ;
+	BigDecimal pymnDays < length = 6 decimal = 2 description = "연차정산일수" > ;
+	String pymnYm < length = 6 description = "정산연월" > ;
+	BigDecimal mnthDays < length = 6 decimal = 2 description = "발생월차일수(월만근연차)" > ;
+	BigDecimal mnthPreFrwrDays < length = 6 decimal = 2 description = "이월월차일수(전년도미사용)" > ;
+	BigDecimal mnthSumDays < length = 6 decimal = 2 description = "당해연도월차합계일수" > ;
+	BigDecimal mnthUseDays < length = 6 decimal = 2 description = "월차 사용일수" > ;
+	BigDecimal mnthExtnDays < length = 6 decimal = 2 description = "월차 소멸일수" > ;
+	BigDecimal mnthUnsdDays < length = 6 decimal = 2 description = "월사 미사용일수" > ;
+	BigDecimal mnthFrwrDays < length = 6 decimal = 2 description = "월차 이월일수" > ;
+	BigDecimal mnthPymnDays < length = 6 decimal = 2 description = "월차 정산일수" > ;
+	String mnthPymnYm < length = 6 description = "월차 정산연월" > ;
+	String yrlyUseStrtYmd < length = 8 description = "연차사용시작일자" > ;
+	String yrlyUseEndYmd < length = 8 description = "연차사용종료일자" > ;
+	String mnthUseStrtYmd < length = 8 description = "월차사용시작일자" > ;
+	String mnthUseEndYmd < length = 8 description = "월차사용종료일자" > ;
+	BigDecimal baseDays < length = 6 decimal = 2 description = "기본연차발생일수" > ;
+	BigDecimal cnsrDays < length = 6 decimal = 2 description = "연차보전일수" > ;
+	BigDecimal nrmlAmt < length = 20 description = "통상임금" > ;
+	BigDecimal dlyAmt < length = 20 description = "일급" > ;
+	BigDecimal yrlyAmt < length = 20 description = "연차수당" > ;
+	BigDecimal mnthYrlyAmt < length = 20 description = "월차수당" > ;
+	String slryAtrbYm < length = 6 description = "지급기준연월" > ;
+	String slryGbCd < length = 20 description = "지급구분코드" > ;
+	Integer slrySeq < length = 5 description = "지급차수" > ;
+	String pymnYmd < length = 8 description = "지급일자" > ;
+	BigDecimal hlthDays < length = 6 decimal = 2 description = "보건발생일수" > ;
+	BigDecimal hlthUseDays < length = 6 decimal = 2 description = "보건사용일수" > ;
+	String rmrk < length = 2000 description = "비고" > ;
+	String emplNm < length = 100 description = "성명" > ;
+	String dprtNm < length = 100 description = "부서명칭" > ;
+	String emplGbCd < length = 20 description = "사원구분코드" > ;
+	String workStCd < length = 20 description = "근무상태코드" > ;
+	BigDecimal prvsSumDays < length = 6 decimal = 2 description = "전년도연차합계일수" > ;
+	BigDecimal prvsUseDays < length = 6 decimal = 2 description = "전년도사용일수" > ;
+	BigDecimal prvsExtnDays < length = 6 decimal = 2 description = "전년도소멸일수" > ;
+	BigDecimal prvsUnsdDays < length = 6 decimal = 2 description = "전년도미사용일수" > ;
+	String orgnSiteCd < length = 20 description = "원소속사업장코드" > ;
+	String orgnSiteNm < length = 200 description = "원소속사업장명칭" > ;
+	String enlsYmd < length = 8 description = "입대일자" > ;
+	String dschYmd < length = 8 description = "제대일자" > ;
+}
 
 로직:
-MSmpEmpTstBean001 Bean 객체 (MSmpEmpTstBean001InDto를 parater로 사용) 생성, 리턴 값은 int
-Bean.insertEmp(SSmpEmpTst1001A002InDto) 호출 리턴 값은 int
-SSmpEmpTst1001A002OutDto DTO를 생성하고 bean 호출 리턴 값을 SSmpEmpTst1001A002OutDto에 복사 
+BHRAbsnYrly Bean 객체 생성(DHRAbsnYrly01IO를 parater로 사용) 이고 리턴 값은 List<DHRAbsnYrly01IO> 임
+DHRAbsnYrly01IO DTO를 생성하고 SHRABSN10101In의 필드 값을 복사
+Bean.selectYrlyList(HRAbsnYrly01IO) 호출
+위 호출 결과 List<DHRAbsnYrly01IO>의 값을 SHRABSN10101Out.sub 필드에 넣어주는 로직 생성
 
 
-/**
- * 직원 정보 추가 서비스 오퍼레이션
- * @param input
- * @return
- * @throws DefaultApplicationException
- */
-@BxmServiceOperation("ssmpemptst1001a002")
-@BxmCategory(logicalName = "직원정보 추가", description = "")
-public SSmpEmpTst1001A002OutDto ssmpemptst1001a002(SSmpEmpTst1001A002InDto input)
-        throws DefaultApplicationException {
-
-    logger.debug("============== SERVICE START ==============");
-    logger.debug("input = {}", input);
-
-    MSmpEmpTstBean001 mSmpEmpTstBean001 = DefaultApplicationContext.getBean(MSmpEmpTstBean001.class);
-
-    /**
-     * @BXMType VariableDeclaration
-     */
-    SSmpEmpTst1001A002OutDto output = new SSmpEmpTst1001A002OutDto();
-
-    /**
-     * @BXMType VariableDeclaration
-     */
-    int insertCount = 0;
-
-    /**
-     * @BXMType BeanCall
-     * @Desc Call bean method to insert employee data
-     */
-    insertCount = mSmpEmpTstBean001.insertEmp(input);
-
-    output.setInsertCount(insertCount);
-
-    logger.debug("output = {}", output);
-    logger.debug("============== SERVICE END ==============");
-
-    return output;
-}
+--------------------------------- 요청 결과 에러 -----------------------------
+BXCODE
+FileNotFoundException: https://ulp8jp48uyjb14-8000.proxy.runpod.net/chat
