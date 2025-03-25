@@ -10,6 +10,7 @@ from session_manager import get_session_history
 from vector import search_vector  
 
 from models import BxmInput
+from const import MODEL_NAME, TEMPERATURE, VERBOSE
 
 # 환경 변수 로드
 load_dotenv()
@@ -58,7 +59,7 @@ def run_openai_chat(bxmInput: BxmInput, sessionId: str = "conversation_session")
     """
     # OpenAI 모델 설정
     # chat = ChatOpenAI(model_name="gpt-4.5-preview", verbose=True, temperature=0.7)
-    chat = ChatOpenAI(model_name="gpt-4o-mini", verbose=True, temperature=0.7)
+    chat = ChatOpenAI(model_name=MODEL_NAME, verbose=VERBOSE, temperature=TEMPERATURE)
 
 
     # 프롬프트 템플릿 설정
@@ -84,11 +85,10 @@ Refer to this information to generate the appropriate code.:
 
     # context 가져오기
     context = get_context(bxmInput.object_type)
-
     # 호출 직전에 수동으로 프롬프트 확인
     formatted_prompt = prompt.format(
         context=context,
-        history=get_session_history(sessionId).messages,
+        history=get_session_history(sessionId).get_messages(),
         input=bxmInput.query
     )
     print(f"프롬프트:\n{formatted_prompt}")

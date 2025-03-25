@@ -268,6 +268,140 @@ Bean.selectYrlyList(HRAbsnYrly01IO) 호출
 위 호출 결과 List<DHRAbsnYrly01IO>의 값을 SHRABSN10101Out.sub 필드에 넣어주는 로직 생성
 
 
---------------------------------- 요청 결과 에러 -----------------------------
-BXCODE
-FileNotFoundException: https://ulp8jp48uyjb14-8000.proxy.runpod.net/chat
+--------------------------------- 요청 결과 -----------------------------
+
+@BxmService("SSMP1001A")
+@BxmCategory(logicalName = "Single select")
+public class SSMP1001A {
+    final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private MSmpEmpInfMng mSmpEmpInfMng;
+
+    @BxmServiceOperation("ssmp1001a001")
+    @BxmCategory(logicalName = "Single select")
+    public SHRABSN10101Out shrAbsnYrlyList(SSHRABSN10101In input) throws DefaultApplicationException {
+
+        logger.debug("============== SERVICE START ==============");
+        logger.debug("input = {}", input);
+
+        mSmpEmpInfMng = DefaultApplicationContext.getBean(mSmpEmpInfMng, MSmpEmpInfMng.class);
+
+        /**
+         * @BXMType VariableDeclaration
+         */
+        DSmpEmpTst000Dto beanInput = new DSmpEmpTst000Dto();
+
+        /**
+         * @BXMType VariableDeclaration
+         */
+        SHRABSN10101Out output = new SHRABSN10101Out();
+
+        /**
+         * @BXMType IF
+         */
+        if (input.getFeduEmpNo().equals(BigDecimal.valueOf(9877))) {
+            logger.error("Pre-Deploy Test Exception for FeduEmpNo [9877].");
+            throw new DefaultApplicationException("BXME30000", new Object[] {},
+                    new Object[] { "Pre-Deploy Test Exception." });
+        }
+
+        /**
+         * @BXMType LogicalArea
+         * @Desc DTO mapping
+         */
+        {
+            beanInput.setFeduEmpNo(input.getFeduEmpNo());
+            beanInput.setAtrbYy(input.getAtrbYy());
+            beanInput.setOrgnSiteCd(input.getOrgnSiteCd());
+            beanInput.setDprtCd(input.getDprtCd());
+            beanInput.setWorkStCd(input.getWorkStCd());
+            beanInput.setEmplGbCd(input.getEmplGbCd());
+            beanInput.setSrchVl(input.getSrchVl());
+        }
+
+        /**
+         * @BXMType BeanCall
+         * @Desc Call bean single select method
+         */
+        List<DHRAbsnYrly01IO> beanOutputList = mSmpEmpInfMng.selectYrlyList(beanInput);
+
+        /**
+         * @BXMType LogicalArea
+         * @Desc add message
+         */
+        {
+            DefaultApplicationContext.addMessage("BXMI60000", null, new Object[] {});
+        }
+
+        /**
+         * @BXMType LogicalArea
+         * @Desc output data mapping
+         */
+        {
+            output.setSub01Cnt(beanOutputList.size());
+            for (DHRAbsnYrly01IO beanOutput : beanOutputList) {
+                SHRABSN10101Sub sub = new SHRABSN10101Sub();
+                sub.setCrprCd(beanOutput.getCrprCd());
+                sub.setAtrbYy(beanOutput.getAtrbYy());
+                sub.setEmplNo(beanOutput.getEmplNo());
+                sub.setAtrbMm(beanOutput.getAtrbMm());
+                sub.setBaseYmd(beanOutput.getBaseYmd());
+                sub.setClclYmd(beanOutput.getClclYmd());
+                sub.setJoinYmd(beanOutput.getJoinYmd());
+                sub.setGrpJoinYmd(beanOutput.getGrpJoinYmd());
+                sub.setYrlyBaseYmd(beanOutput.getYrlyBaseYmd());
+                sub.setRtrmYmd(beanOutput.getRtrmYmd());
+                sub.setDprtCd(beanOutput.getDprtCd());
+                sub.setPstnCd(beanOutput.getPstnCd());
+                sub.setTtlLngvDays(beanOutput.getTtlLngvDays());
+                sub.setTtlLngvMnth(beanOutput.getTtlLngvMnth());
+                sub.setLngvYrs(beanOutput.getLngvYrs());
+                sub.setLngvMnth(beanOutput.getLngvMnth());
+                sub.setLngvDays(beanOutput.getLngvDays());
+                sub.setAdedDays(beanOutput.getAdedDays());
+                sub.setArmAdedDays(beanOutput.getArmAdedDays());
+                sub.setYrlyDays(beanOutput.getYrlyDays());
+                sub.setPreFrwrDays(beanOutput.getPreFrwrDays());
+                sub.setSumDays(beanOutput.getSumDays());
+                sub.setUseDays(beanOutput.getUseDays());
+                sub.setExtnDays(beanOutput.getExtnDays());
+                sub.setUnsdDays(beanOutput.getUnsdDays());
+                sub.setFrwrDays(beanOutput.getFrwrDays());
+                sub.setPymnDays(beanOutput.getPymnDays());
+                sub.setPymnYm(beanOutput.getPymnYm());
+                sub.setMnthDays(beanOutput.getMnthDays());
+                sub.setMnthPreFrwrDays(beanOutput.getMnthPreFrwrDays());
+                sub.setMnthSumDays(beanOutput.getMnthSumDays());
+                sub.setMnthUseDays(beanOutput.getMnthUseDays());
+                sub.setMnthExtnDays(beanOutput.getMnthExtnDays());
+                sub.setMnthUnsdDays(beanOutput.getMnthUnsdDays());
+                sub.setMnthFrwrDays(beanOutput.getMnthFrwrDays());
+                sub.setMnthPymnDays(beanOutput.getMnthPymnDays());
+                sub.setMnthPymnYm(beanOutput.getMnthPymnYm());
+                sub.setYrlyUseStrtYmd(beanOutput.getYrlyUseStrtYmd());
+                sub.setYrlyUseEndYmd(beanOutput.getYrlyUseEndYmd());
+                sub.setMnthUseStrtYmd(beanOutput.getMnthUseStrtYmd());
+                sub.setMnthUseEndYmd(beanOutput.getMnthUseEndYmd());
+                sub.setBaseDays(beanOutput.getBaseDays());
+                sub setCnsrDays(beanOutput.getCnsrDays());
+                sub.setNrmlAmt(beanOutput.getNrmlAmt());
+                sub.setDlyAmt(beanOutput.getDlyAmt());
+                sub.setYrlyAmt(beanOutput.getYrlyAmt());
+                sub.setMnthYrlyAmt(beanOutput.getMnthYrlyAmt());
+                sub.setSlryAtrbYm(beanOutput.getSlryAtrbYm());
+                sub.setSlryGbCd(beanOutput.getSlryGbCd());
+                sub.setSlrySeq(beanOutput.getSlrySeq());
+                sub.setPymnYmd(beanOutput.getPymnYmd());
+                sub.setHlthDays(beanOutput.getHlthDays());
+                sub.setHlthUseDays(beanOutput.getHlthUseDays());
+                sub.setRmrk(beanOutput.getRmrk()); // 추가된 필드
+                output.addSub(sub);
+            }
+        }
+
+        logger.debug("output = {}", output);
+        logger.debug("============== SERVICE END ==============");
+
+        return output;
+    }
+}
